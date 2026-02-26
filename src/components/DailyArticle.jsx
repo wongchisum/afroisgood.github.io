@@ -7,12 +7,11 @@ export const DailyArticle = ({
     currentData,
     selectedDate,
     tearDirection,
-    isHoveringLink,
-    setIsHoveringLink,
     youtubeId,
     setIsImmersive
 }) => {
     const [isCopied, setIsCopied] = useState(false);
+    const [isHoveringLink, setIsHoveringLink] = useState(false);
 
     // 處理分享的精緻邏輯
     const handleShare = async () => {

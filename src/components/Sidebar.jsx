@@ -1,6 +1,7 @@
+import React from 'react';
 import { IconDisc, IconChevronLeft, IconChevronRight } from './Icons';
 
-export const Sidebar = ({
+export const Sidebar = React.memo(({
     isPlaying,
     currentMonth,
     setCurrentMonth,
@@ -70,4 +71,4 @@ export const Sidebar = ({
             </div>
         </div>
     );
-};
+});;

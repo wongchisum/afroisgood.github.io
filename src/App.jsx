@@ -19,7 +19,6 @@ const App = () => {
     const [loading, setLoading] = useState(true);
     const [isPlaying, setIsPlaying] = useState(false);
     const [tearDirection, setTearDirection] = useState(null);
-    const [isHoveringLink, setIsHoveringLink] = useState(false);
     const [showChangelog, setShowChangelog] = useState(false);
     const [isImmersive, setIsImmersive] = useState(false);
     
@@ -203,9 +202,11 @@ const App = () => {
                     
                     {/* 主要文章與黑膠區域 */}
                     <DailyArticle 
-                        currentData={currentData} selectedDate={selectedDate} tearDirection={tearDirection}
-                        isHoveringLink={isHoveringLink} setIsHoveringLink={setIsHoveringLink}
-                        youtubeId={youtubeId} setIsImmersive={setIsImmersive}
+                        currentData={currentData} 
+                        selectedDate={selectedDate} 
+                        tearDirection={tearDirection}
+                        youtubeId={youtubeId} 
+                        setIsImmersive={setIsImmersive}
                     />
                 </div>
             </div>
