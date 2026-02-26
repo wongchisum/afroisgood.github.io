@@ -1,74 +1,115 @@
-import React from 'react';
-import { IconDisc, IconChevronLeft, IconChevronRight } from './Icons';
+// src/components/Sidebar.jsx
+import { IconDisc } from './Icons';
+import { JazzFortune } from './JazzFortune'; 
 
-export const Sidebar = React.memo(({
-    isPlaying,
-    currentMonth,
-    setCurrentMonth,
-    selectedDate,
-    handleDateChange,
-    jazzData,
-    setShowChangelog,
-    latestVersion
+export const Sidebar = ({ 
+    isPlaying, 
+    currentMonth, 
+    setCurrentMonth, 
+    selectedDate, 
+    handleDateChange, 
+    jazzData, 
+    setShowChangelog, 
+    latestVersion 
 }) => {
-    // 獨立出日期格式化邏輯
-    const formatDateString = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-    const dateKey = formatDateString(selectedDate);
+    
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDay = new Date(year, month, 1).getDay();
+    const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+    const blanks = Array.from({ length: firstDay }, (_, i) => i);
+    const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    const handlePrevMonth = () => setCurrentMonth(new Date(year, month - 1, 1));
+    const handleNextMonth = () => setCurrentMonth(new Date(year, month + 1, 1));
+
+    const formatDateString = (y, m, d) => `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 
     return (
-        <div className="lg:col-span-3 bg-stone-900 text-stone-300 p-8 lg:min-h-screen flex flex-col justify-between relative z-20 shadow-2xl">
-            <div>
-                <div className="mb-12 pt-4 flex flex-col items-start">
-                    <div className="flex items-center gap-3 text-amber-500 mb-2">
-                        <IconDisc className={isPlaying ? "animate-spin-fast" : "animate-spin-slow"} size={28} />
-                        <span className="text-xs tracking-[0.3em] uppercase font-bold">Daily Jazz</span>
+        <aside className="lg:col-span-3 lg:sticky lg:top-0 h-screen border-r border-stone-200/60 flex flex-col justify-between bg-[#f8f6f2] z-20 overflow-y-auto hidden-scrollbar pt-12 pb-6 px-6 lg:px-8">
+            
+            <div className="flex-1">
+                {/* 網站標題與 Logo 區塊 */}
+                <div className="mb-12 cursor-pointer group" onClick={() => handleDateChange(new Date())}>
+                    <div className="flex items-center gap-3 mb-3">
+                        <IconDisc 
+                            className={`text-amber-700 transition-transform duration-1000 ${isPlaying ? 'animate-spin-slow' : ''}`} 
+                            size={28} 
+                        />
+                        <h1 className="text-xl font-bold tracking-widest text-stone-800 font-playfair">JAZZ 365</h1>
                     </div>
-                    <h1 className="text-3xl font-zen font-bold text-stone-100 leading-snug">日めくり<br/>ジャズ 365</h1>
-                    <div className="w-12 h-1 bg-amber-600 mt-4"></div>
+                    <p className="text-[10px] tracking-[0.3em] text-stone-400 font-medium uppercase group-hover:text-amber-600 transition-colors">
+                        Daily Jazz Almanac
+                    </p>
                 </div>
-                
+
+                {/* 日曆導覽區塊 */}
                 <div className="mb-8">
-                    <div className="flex items-center justify-between mb-6 border-b border-stone-800 pb-2">
-                        <span className="font-playfair text-2xl text-stone-100 italic">
-                            {currentMonth.toLocaleString('en-US', { month: 'short' })} '{currentMonth.getFullYear().toString().slice(2)}
-                        </span>
-                        <div className="flex gap-2">
-                            <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))}><IconChevronLeft/></button>
-                            <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))}><IconChevronRight/></button>
-                        </div>
+                    <div className="flex items-center justify-between mb-6">
+                        <button onClick={handlePrevMonth} className="text-stone-400 hover:text-amber-700 transition-colors p-1">&lt;</button>
+                        <h2 className="text-sm font-bold tracking-widest uppercase font-playfair">
+                            {currentMonth.toLocaleString('default', { month: 'long' })} {year}
+                        </h2>
+                        <button onClick={handleNextMonth} className="text-stone-400 hover:text-amber-700 transition-colors p-1">&gt;</button>
                     </div>
-                    <div className="grid grid-cols-7 gap-y-3 gap-x-1 place-items-center">
-                        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => <span key={i} className="text-[10px] text-stone-600 font-bold">{day}</span>)}
-                        {(() => {
-                            const year = currentMonth.getFullYear(); 
-                            const month = currentMonth.getMonth(); 
-                            const daysInMonth = new Date(year, month + 1, 0).getDate(); 
-                            const firstDay = new Date(year, month, 1).getDay(); 
-                            const days = [];
-                            
-                            for (let i = 0; i < firstDay; i++) days.push(<div key={`empty-${i}`} className="h-8 w-8"></div>);
-                            
-                            for (let d = 1; d <= daysInMonth; d++) {
-                                const currDate = new Date(year, month, d); 
-                                const currKey = formatDateString(currDate); 
-                                const isSelected = dateKey === currKey;
-                                days.push(
-                                    <button key={d} onClick={() => handleDateChange(currDate)} className={`h-8 w-8 flex items-center justify-center text-sm relative transition-all duration-300 font-serif ${isSelected ? 'text-amber-400 font-bold scale-125' : 'text-stone-400 hover:text-stone-200'}`}>
-                                        <span>{d}</span>
-                                        {jazzData.hasOwnProperty(currKey) && !isSelected && <span className="absolute -bottom-1 w-1 h-1 bg-amber-600 rounded-full"></span>}
-                                    </button>
-                                );
-                            }
-                            return days;
-                        })()}
+
+                    <div className="grid grid-cols-7 gap-y-3 gap-x-1 text-center mb-2">
+                        {weekDays.map(day => (
+                            <div key={day} className="text-[9px] text-stone-400 tracking-wider uppercase font-medium">{day}</div>
+                        ))}
+                        {blanks.map(blank => <div key={`blank-${blank}`} />)}
+                        {days.map(day => {
+                            const dateStr = formatDateString(year, month, day);
+                            const hasData = jazzData && jazzData[dateStr];
+                            const isSelected = selectedDate.getDate() === day && selectedDate.getMonth() === month && selectedDate.getFullYear() === year;
+                            const isToday = new Date().getDate() === day && new Date().getMonth() === month && new Date().getFullYear() === year;
+
+                            return (
+                                <button
+                                    key={day}
+                                    onClick={() => handleDateChange(new Date(year, month, day))}
+                                    disabled={!hasData}
+                                    className={`
+                                        relative text-xs py-1.5 w-full flex items-center justify-center transition-all duration-300
+                                        ${isSelected ? 'bg-amber-700 text-white font-bold shadow-md' : ''}
+                                        ${!isSelected && hasData ? 'hover:bg-stone-200 text-stone-700' : ''}
+                                        ${!hasData ? 'opacity-20 cursor-not-allowed' : 'cursor-pointer'}
+                                        ${isToday && !isSelected ? 'text-amber-700 font-bold' : ''}
+                                    `}
+                                >
+                                    {day}
+                                    {/* 有資料的日期標示小圓點 */}
+                                    {hasData && !isSelected && (
+                                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-amber-700 rounded-full opacity-50"></span>
+                                    )}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
+
+                {/* 爵士占卜區塊 */}
+                <div className="mt-8 mb-10 px-1">
+                    <JazzFortune 
+                        jazzData={jazzData} 
+                        onNavigate={handleDateChange} 
+                    />
+                </div>
+            </div>
+
+            {/* 側邊欄底部：版本資訊 */}
+            <div className="pt-6 border-t border-stone-200/60 flex items-center justify-between">
+                <button 
+                    onClick={() => setShowChangelog(true)}
+                    className="text-[10px] tracking-widest text-stone-400 hover:text-amber-700 transition-colors flex items-center gap-1 uppercase font-bold"
+                >
+                    Update Log <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                </button>
+                <span className="text-[10px] text-stone-300 font-mono">{latestVersion}</span>
             </div>
             
-            <div className="flex flex-col gap-2 mt-8">
-                <button onClick={() => setShowChangelog(true)} className="text-[10px] text-amber-600/60 hover:text-amber-500 transition tracking-widest text-left w-fit uppercase font-bold border-b border-amber-900/30 pb-0.5">{latestVersion} Log</button>
-                <div className="text-[10px] text-stone-600 tracking-widest uppercase"><p>© 2026 TEYLUNG TRANS.</p></div>
-            </div>
-        </div>
+        </aside>
     );
-});;
+};

@@ -9,6 +9,8 @@ import { ChangelogModal } from './components/ChangelogModal';
 import { DailyArticle } from './components/DailyArticle';
 import { EditorNote } from './components/EditorNote';
 import { IconDisc } from './components/Icons';
+// 【重要新增 1】：引入占卜組件
+import { JazzFortune } from './components/JazzFortune'; 
 
 const App = () => {
     const today = new Date();
@@ -32,7 +34,6 @@ const App = () => {
     const dateKey = formatDateString(selectedDate);
     const currentData = jazzData[dateKey];
     
-// 動態更改網頁標題 (Tab Title)
     useEffect(() => {
         if (currentData && currentData.album && currentData.artist) {
             const month = selectedDate.getMonth() + 1;
@@ -166,7 +167,6 @@ const App = () => {
     return (
         <div className="min-h-screen bg-image-paper font-sans text-stone-800 relative overflow-x-hidden transition-colors duration-1000" style={{ backgroundColor: genreColors[currentData?.mood?.trim()] || currentData?.mood || "#f2f0e9" }}>
             
-            {/* 彈出視窗：沉浸模式與更新履歷 */}
             <ImmersiveMode 
                 isImmersive={isImmersive} handleCloseImmersive={handleCloseImmersive} selectedDate={selectedDate}
                 togglePlay={togglePlay} handlePrevDay={handlePrevDay} handleNextDay={handleNextDay}
@@ -176,7 +176,6 @@ const App = () => {
                 showChangelog={showChangelog} setShowChangelog={setShowChangelog} changelogData={changelogData} 
             />
 
-            {/* 主要內容佈局 */}
             <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-12 gap-0 relative">
                 
                 <Sidebar 
@@ -186,21 +185,18 @@ const App = () => {
                 />
                 
                 <div className="lg:col-span-9 relative p-6 lg:p-12 flex flex-col justify-start pt-20 lg:pt-32 min-h-screen">
-                    {/* 桌機版石編的話 (絕對定位在右上角) */}
                     {currentData?.editorNote?.trim() && (
                         <div className="absolute top-12 right-12 z-40 max-w-[300px] hidden lg:block">
                             <EditorNote note={currentData.editorNote} />
                         </div>
                     )}
 
-                    {/* 背景大數字 */}
                     <div className="absolute top-0 right-0 lg:right-20 -z-10 select-none opacity-5 pointer-events-none">
                         <span className="font-playfair text-[20rem] lg:text-[25rem] leading-none text-stone-900">
                             {String(selectedDate.getDate()).padStart(2, '0')}
                         </span>
                     </div>
                     
-                    {/* 主要文章與黑膠區域 */}
                     <DailyArticle 
                         currentData={currentData} 
                         selectedDate={selectedDate} 
@@ -208,6 +204,9 @@ const App = () => {
                         youtubeId={youtubeId} 
                         setIsImmersive={setIsImmersive}
                     />
+
+
+
                 </div>
             </div>
         </div>
