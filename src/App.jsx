@@ -33,6 +33,17 @@ const App = () => {
     const dateKey = formatDateString(selectedDate);
     const currentData = jazzData[dateKey];
     
+// 動態更改網頁標題 (Tab Title)
+    useEffect(() => {
+        if (currentData && currentData.album && currentData.artist) {
+            const month = selectedDate.getMonth() + 1;
+            const day = selectedDate.getDate();
+            document.title = `${month}月${day}日 | ${currentData.album} - ${currentData.artist}`;
+        } else {
+            document.title = '日めくりジャズ365 | 2026年版';
+        }
+    }, [selectedDate, currentData]);
+
     const getYouTubeVideoId = (url) => {
         if (!url) return null;
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
