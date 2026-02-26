@@ -1,6 +1,7 @@
 // src/components/DailyArticle.jsx
+import { useState } from 'react';
 import { EditorNote } from './EditorNote';
-import { IconDisc, StoneVinylIcon, IconArrowRight, IconQuote } from './Icons';
+import { IconDisc, StoneVinylIcon, IconArrowRight, IconQuote, IconShare, IconCheck } from './Icons';
 
 export const DailyArticle = ({
     currentData,
@@ -11,6 +12,37 @@ export const DailyArticle = ({
     youtubeId,
     setIsImmersive
 }) => {
+    const [isCopied, setIsCopied] = useState(false);
+
+    // 處理分享的精緻邏輯
+    const handleShare = async () => {
+        // 準備要分享的專屬文案與當日專屬網址 (包含 #hash)
+        const shareData = {
+            title: `日めくりジャズ365 | ${selectedDate.getMonth() + 1}月${selectedDate.getDate()}日`,
+            text: `🎵 今天的爵士推薦是 ${currentData.artist} 的《${currentData.album}》！快來聽聽看：`,
+            url: window.location.href, 
+        };
+
+        if (navigator.share) {
+            // 如果裝置支援原生分享 (如手機)，叫出系統分享選單
+            try {
+                await navigator.share(shareData);
+            } catch (err) {
+                console.log('分享動作已取消或失敗', err);
+            }
+        } else {
+            // 如果不支援 (如一般桌機)，優雅地降級為「複製到剪貼簿」
+            try {
+                await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+                setIsCopied(true);
+                // 2 秒後把 COPIED 狀態變回原來的 SHARE
+                setTimeout(() => setIsCopied(false), 2000); 
+            } catch (err) {
+                console.error('複製失敗', err);
+            }
+        }
+    };
+
     if (!currentData) {
         return (
             <div className="flex flex-col items-center justify-center h-64 opacity-30 text-center">
@@ -68,11 +100,20 @@ export const DailyArticle = ({
                         )}
                     </div>
 
-                    <div className="mt-6 grid grid-cols-1 gap-2" onMouseEnter={() => setIsHoveringLink(true)} onMouseLeave={() => setIsHoveringLink(false)}>
-                        {currentData.youtube && <a href={currentData.youtube} target="_blank" rel="noreferrer" className="px-4 py-2.5 bg-red-800 text-white text-[10px] tracking-[0.2em] font-bold hover:bg-red-700 transition-all hover:translate-x-1">YOUTUBE <IconArrowRight size={14}/></a>}
-                        {currentData.spotify && <a href={currentData.spotify} target="_blank" rel="noreferrer" className="px-4 py-2.5 bg-green-800 text-white text-[10px] tracking-[0.2em] font-bold hover:bg-green-700 transition-all hover:translate-x-1">SPOTIFY <IconArrowRight size={14}/></a>}
-                        {currentData.appleMusic && <a href={currentData.appleMusic} target="_blank" rel="noreferrer" className="px-4 py-2.5 bg-stone-800 text-white text-[10px] tracking-[0.2em] font-bold hover:bg-stone-700 transition-all hover:translate-x-1">APPLE MUSIC <IconArrowRight size={14}/></a>}
-                        {currentData.other && <a href={currentData.other} target="_blank" rel="noreferrer" className="px-4 py-2.5 bg-slate-600 text-white text-[10px] tracking-[0.2em] font-bold hover:bg-slate-500 transition-all hover:translate-x-1">OTHER <IconArrowRight size={14}/></a>}
+                    <div className="mt-6 grid grid-cols-2 gap-2" onMouseEnter={() => setIsHoveringLink(true)} onMouseLeave={() => setIsHoveringLink(false)}>
+                        {currentData.youtube && <a href={currentData.youtube} target="_blank" rel="noreferrer" className="flex items-center justify-between px-4 py-2.5 bg-red-800 text-white text-[10px] tracking-[0.2em] font-bold hover:bg-red-700 transition-all hover:translate-x-1">YOUTUBE <IconArrowRight size={14}/></a>}
+                        {currentData.spotify && <a href={currentData.spotify} target="_blank" rel="noreferrer" className="flex items-center justify-between px-4 py-2.5 bg-green-800 text-white text-[10px] tracking-[0.2em] font-bold hover:bg-green-700 transition-all hover:translate-x-1">SPOTIFY <IconArrowRight size={14}/></a>}
+                        {currentData.appleMusic && <a href={currentData.appleMusic} target="_blank" rel="noreferrer" className="flex items-center justify-between px-4 py-2.5 bg-stone-800 text-white text-[10px] tracking-[0.2em] font-bold hover:bg-stone-700 transition-all hover:translate-x-1">APPLE MUSIC <IconArrowRight size={14}/></a>}
+                        {currentData.other && <a href={currentData.other} target="_blank" rel="noreferrer" className="flex items-center justify-between px-4 py-2.5 bg-slate-600 text-white text-[10px] tracking-[0.2em] font-bold hover:bg-slate-500 transition-all hover:translate-x-1">OTHER <IconArrowRight size={14}/></a>}
+                        
+                        {/* 專屬分享按鈕，如果沒有前面四個按鈕，它會獨自佔滿寬度或排在最後 */}
+                        <button 
+                            onClick={handleShare}
+                            className={`flex items-center justify-between px-4 py-2.5 transition-all hover:translate-x-1 text-[10px] tracking-[0.2em] font-bold ${isCopied ? 'bg-amber-600 text-white' : 'bg-stone-200 text-stone-800 hover:bg-stone-300'} ${(!currentData.youtube && !currentData.spotify && !currentData.appleMusic && !currentData.other) ? 'col-span-2' : ''}`}
+                        >
+                            {isCopied ? 'COPIED!' : 'SHARE'} 
+                            {isCopied ? <IconCheck size={14}/> : <IconShare size={14}/>}
+                        </button>
                     </div>
                 </div>
                 
