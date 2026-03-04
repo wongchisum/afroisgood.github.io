@@ -44,47 +44,45 @@ export const JazzFortune = ({ jazzData, onNavigate }) => {
     };
 
     return (
-        <div className="mt-8 pt-6 border-t border-stone-300 font-zen relative">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#f8f6f2] px-3 py-1 text-[10px] tracking-[0.2em] text-amber-700 font-bold uppercase border border-amber-200 whitespace-nowrap">
+        <div className="mt-8 pt-6 border-t border-white/20 font-zen relative">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-zinc-950 px-3 py-1 text-[10px] tracking-[0.2em] text-amber-500 font-bold uppercase border border-amber-500/50 whitespace-nowrap rounded shadow-[0_0_10px_rgba(245,158,11,0.2)]">
                 Jazz Fortune
             </div>
 
             {!result ? (
-                <div className="bg-white/60 p-4 shadow-sm border border-stone-200 text-sm">
+                // 底色改為更實心的 zinc-900，邊框提亮
+                <div className="bg-zinc-900 p-4 shadow-lg border border-white/20 text-sm rounded-md">
                     <div className="space-y-3 mb-4">
                         <input 
                             type="text" placeholder="你的姓名" 
-                            className="w-full bg-transparent border-b border-stone-300 py-1 text-xs focus:outline-none focus:border-amber-600 text-stone-700"
+                            className="w-full bg-transparent border-b border-white/30 py-1 text-xs focus:outline-none focus:border-amber-400 text-white placeholder:text-zinc-400 transition-colors font-medium"
                             onChange={e => setFormData({...formData, name: e.target.value})}
                         />
                         
-                        {/* 🌟 終極修正：透明疊加法 (解決 iOS 鍵盤跳出問題) */}
                         <div className="relative w-full">
-                            {/* 底層的假 Placeholder (點擊會穿透) */}
                             {!formData.date && (
-                                <div className="absolute left-0 top-1 text-xs text-stone-400 pointer-events-none">
+                                <div className="absolute left-0 top-1 text-xs text-zinc-400 pointer-events-none font-medium">
                                     選擇出生年月日
                                 </div>
                             )}
-                            {/* 上層的真實 Date Input (永遠都是 date 屬性) */}
                             <input 
                                 type="date" 
-                                className={`w-full bg-transparent border-b border-stone-300 py-1 text-xs focus:outline-none focus:border-amber-600 cursor-pointer relative z-10 transition-colors ${!formData.date ? 'text-transparent' : 'text-stone-700'}`}
+                                className={`w-full bg-transparent border-b border-white/30 py-1 text-xs focus:outline-none focus:border-amber-400 cursor-pointer relative z-10 transition-colors font-medium ${!formData.date ? 'text-transparent' : 'text-white'}`}
                                 onChange={e => setFormData({...formData, date: e.target.value})}
                             />
                         </div>
                     </div>
 
-                    <div className="flex gap-1 mb-4">
+                    <div className="flex gap-2 mb-5">
                         <button 
                             onClick={() => setFormData({...formData, mode: 'astrology'})}
-                            className={`flex-1 py-2 text-[10px] tracking-widest font-bold border transition-all ${formData.mode === 'astrology' ? 'bg-stone-800 text-white' : 'bg-white text-stone-400'}`}
+                            className={`flex-1 py-2 text-[10px] tracking-widest font-bold border border-transparent transition-all rounded-sm ${formData.mode === 'astrology' ? 'bg-amber-500 text-zinc-950 shadow-[0_0_15px_rgba(245,158,11,0.4)]' : 'bg-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-700'}`}
                         >
                             紫微/占星
                         </button>
                         <button 
                             onClick={() => setFormData({...formData, mode: 'humanDesign'})}
-                            className={`flex-1 py-2 text-[10px] tracking-widest font-bold border transition-all ${formData.mode === 'humanDesign' ? 'bg-stone-800 text-white' : 'bg-white text-stone-400'}`}
+                            className={`flex-1 py-2 text-[10px] tracking-widest font-bold border border-transparent transition-all rounded-sm ${formData.mode === 'humanDesign' ? 'bg-amber-500 text-zinc-950 shadow-[0_0_15px_rgba(245,158,11,0.4)]' : 'bg-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-700'}`}
                         >
                             人類圖
                         </button>
@@ -92,20 +90,20 @@ export const JazzFortune = ({ jazzData, onNavigate }) => {
 
                     <button 
                         onClick={handleAnalyze} disabled={loading}
-                        className="w-full py-3 bg-amber-700 text-white text-[11px] font-black tracking-widest hover:bg-amber-800 disabled:opacity-50 transition-colors"
+                        className="w-full py-3 bg-amber-500 text-zinc-950 text-[11px] font-black tracking-widest hover:bg-amber-400 hover:shadow-[0_0_15px_rgba(245,158,11,0.5)] disabled:opacity-50 transition-all rounded-sm uppercase"
                     >
                         {loading ? "感應星象中..." : "抽取今日命定爵士"}
                     </button>
                 </div>
             ) : (
-                <div className="bg-stone-900 text-stone-100 p-5 shadow-xl page-reveal text-xs">
-                    <p className="text-[10px] text-amber-500 tracking-widest mb-3 font-bold uppercase border-b border-amber-500/30 pb-1 inline-block">
+                <div className="bg-zinc-900 border border-amber-500/40 text-white p-5 shadow-2xl page-reveal text-xs rounded-md">
+                    <p className="text-[10px] text-amber-400 tracking-widest mb-3 font-bold uppercase border-b border-amber-500/30 pb-1 inline-block">
                         {formData.name} 的專屬指引
                     </p>
-                    <p className="leading-relaxed font-zen italic text-stone-200 mb-4 whitespace-pre-line">
+                    <p className="leading-relaxed font-zen italic text-zinc-100 mb-4 whitespace-pre-line text-[13px]">
                         {result.text}
                     </p>
-                    <button onClick={() => setResult(null)} className="text-[10px] text-stone-500 hover:text-amber-500 tracking-widest transition-colors">
+                    <button onClick={() => setResult(null)} className="text-[10px] text-zinc-400 hover:text-amber-400 tracking-widest transition-colors font-bold">
                         ← 重新抽取
                     </button>
                 </div>

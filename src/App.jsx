@@ -1,7 +1,7 @@
+// src/App.jsx
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import Papa from 'papaparse';
 
-// 引入所有拆分出來的組件與工具
 import { useYouTubePlayer } from './hooks/useYouTubePlayer';
 import { Sidebar } from './components/Sidebar';
 import { ImmersiveMode } from './components/ImmersiveMode';
@@ -9,7 +9,6 @@ import { ChangelogModal } from './components/ChangelogModal';
 import { DailyArticle } from './components/DailyArticle';
 import { EditorNote } from './components/EditorNote';
 import { IconDisc } from './components/Icons';
-// 【重要新增 1】：引入占卜組件
 import { JazzFortune } from './components/JazzFortune'; 
 
 const App = () => {
@@ -165,6 +164,7 @@ const App = () => {
     const latestVersion = changelogData[0]?.version || "v1.0.0";
 
     return (
+        // 確保右側保持淺色，文字為深石灰色
         <div className="min-h-screen bg-image-paper font-sans text-stone-800 relative overflow-x-hidden transition-colors duration-1000" style={{ backgroundColor: genreColors[currentData?.mood?.trim()] || currentData?.mood || "#f2f0e9" }}>
             
             <ImmersiveMode 
@@ -191,7 +191,8 @@ const App = () => {
                         </div>
                     )}
 
-                    <div className="absolute top-0 right-0 lg:right-20 -z-10 select-none opacity-5 pointer-events-none">
+                    {/* 淺色浮水印 */}
+                    <div className="absolute top-0 right-0 lg:right-20 -z-10 select-none opacity-[0.04] pointer-events-none">
                         <span className="font-playfair text-[20rem] lg:text-[25rem] leading-none text-stone-900">
                             {String(selectedDate.getDate()).padStart(2, '0')}
                         </span>
@@ -204,8 +205,6 @@ const App = () => {
                         youtubeId={youtubeId} 
                         setIsImmersive={setIsImmersive}
                     />
-
-
 
                 </div>
             </div>
