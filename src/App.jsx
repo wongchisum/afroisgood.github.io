@@ -12,6 +12,7 @@ import { IconDisc } from './components/Icons';
 import { JazzFortune } from './components/JazzFortune'; 
 
 const App = () => {
+    // 【所有資料與播放邏輯保留 1.3.0 穩定版】
     const today = new Date();
     const [selectedDate, setSelectedDate] = useState(today);
     const [currentMonth, setCurrentMonth] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
@@ -164,7 +165,6 @@ const App = () => {
     const latestVersion = changelogData[0]?.version || "v1.0.0";
 
     return (
-        // 確保右側保持淺色，文字為深石灰色
         <div className="min-h-screen bg-image-paper font-sans text-stone-800 relative overflow-x-hidden transition-colors duration-1000" style={{ backgroundColor: genreColors[currentData?.mood?.trim()] || currentData?.mood || "#f2f0e9" }}>
             
             <ImmersiveMode 
@@ -184,14 +184,16 @@ const App = () => {
                     setShowChangelog={setShowChangelog} latestVersion={latestVersion}
                 />
                 
-                <div className="lg:col-span-9 relative p-6 lg:p-12 flex flex-col justify-start pt-20 lg:pt-32 min-h-screen">
+                {/* 🌟 核心修正：大幅減少 pt-20 lg:pt-32 的上邊距，讓內容上移。石編的話(absolute)不會受影響。 */}
+                <div className="lg:col-span-9 relative p-6 lg:p-12 flex flex-col justify-start pt-4 lg:pt-8 min-h-screen">
+                    
+                    {/* 石編的話依然錨定在右上角角落 (absolute top-12 right-12) */}
                     {currentData?.editorNote?.trim() && (
                         <div className="absolute top-12 right-12 z-40 max-w-[300px] hidden lg:block">
                             <EditorNote note={currentData.editorNote} />
                         </div>
                     )}
 
-                    {/* 淺色浮水印 */}
                     <div className="absolute top-0 right-0 lg:right-20 -z-10 select-none opacity-[0.04] pointer-events-none">
                         <span className="font-playfair text-[20rem] lg:text-[25rem] leading-none text-stone-900">
                             {String(selectedDate.getDate()).padStart(2, '0')}
