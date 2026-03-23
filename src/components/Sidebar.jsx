@@ -28,7 +28,7 @@ export const Sidebar = ({
     const formatDateString = (y, m, d) => `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 
     return (
-        <aside className="lg:col-span-3 lg:sticky lg:top-0 h-screen border-r border-white/20 flex flex-col justify-between bg-zinc-950 z-20 overflow-y-auto hidden-scrollbar pt-12 pb-6 px-6 lg:px-8">
+        <aside className="hidden lg:flex lg:col-span-3 lg:sticky lg:top-0 h-screen border-r border-white/20 flex-col justify-between bg-zinc-950 z-20 overflow-y-auto hidden-scrollbar pt-12 pb-6 px-8">
             
             <div className="flex-1">
                 <div className="mb-12 cursor-pointer group" onClick={() => handleDateChange(new Date())}>

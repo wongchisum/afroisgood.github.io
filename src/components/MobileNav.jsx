@@ -1,0 +1,173 @@
+// src/components/MobileNav.jsx
+// 手機專用底部導航欄 + 日曆抽屜（lg 以上隱藏）
+import { useState } from 'react';
+import { IconDisc } from './Icons';
+import { RandomExplore } from './RandomExplore';
+
+const CalendarIcon = () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+        <line x1="16" y1="2" x2="16" y2="6"/>
+        <line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>
+);
+
+const CloseIcon = () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+);
+
+export const MobileNav = ({
+    selectedDate,
+    currentMonth,
+    setCurrentMonth,
+    handleDateChange,
+    handlePrevDay,
+    handleNextDay,
+    jazzData,
+    isPlaying,
+}) => {
+    const [drawerOpen, setDrawerOpen] = useState(false);
+
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDay = new Date(year, month, 1).getDay();
+    const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+    const blanks = Array.from({ length: firstDay }, (_, i) => i);
+    const weekDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+
+    const formatDateString = (y, m, d) =>
+        `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+
+    const handlePrevMonth = () => setCurrentMonth(new Date(year, month - 1, 1));
+    const handleNextMonth = () => setCurrentMonth(new Date(year, month + 1, 1));
+
+    const handleDayClick = (day) => {
+        handleDateChange(new Date(year, month, day));
+        setDrawerOpen(false);
+    };
+
+    const monthLabel = currentMonth.toLocaleString('default', { month: 'long' });
+
+    const dateLabel = selectedDate.toLocaleDateString('zh-TW', {
+        month: 'numeric', day: 'numeric',
+    });
+
+    return (
+        <>
+            {/* 日曆抽屜背景遮罩 */}
+            {drawerOpen && (
+                <div
+                    className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+                    onClick={() => setDrawerOpen(false)}
+                />
+            )}
+
+            {/* 日曆抽屜 */}
+            <div
+                className={`fixed bottom-14 left-0 right-0 z-50 lg:hidden bg-zinc-950 border-t border-white/20 rounded-t-2xl transition-transform duration-300 ease-out overflow-y-auto max-h-[80vh] ${drawerOpen ? 'translate-y-0' : 'translate-y-full'}`}
+            >
+                <div className="px-5 pt-4 pb-6">
+                    {/* 拖曳把手 */}
+                    <div className="w-10 h-1 bg-white/20 rounded-full mx-auto mb-5"/>
+
+                    {/* JAZZ 365 Logo */}
+                    <div
+                        className="flex items-center gap-2 mb-6 cursor-pointer"
+                        onClick={() => { handleDateChange(new Date()); setDrawerOpen(false); }}
+                    >
+                        <IconDisc
+                            className={`text-amber-500 ${isPlaying ? 'animate-spin-slow' : ''}`}
+                            size={22}
+                        />
+                        <span className="text-base font-bold tracking-widest text-white font-playfair">JAZZ 365</span>
+                    </div>
+
+                    {/* 月份切換 */}
+                    <div className="flex items-center justify-between mb-4">
+                        <button onClick={handlePrevMonth} className="text-zinc-400 hover:text-amber-400 transition-colors p-2 font-bold text-lg">&lt;</button>
+                        <h2 className="text-sm font-bold tracking-widest uppercase font-playfair text-white">
+                            {monthLabel} {year}
+                        </h2>
+                        <button onClick={handleNextMonth} className="text-zinc-400 hover:text-amber-400 transition-colors p-2 font-bold text-lg">&gt;</button>
+                    </div>
+
+                    {/* 日曆 Grid */}
+                    <div className="grid grid-cols-7 gap-y-2 gap-x-1 text-center mb-2">
+                        {weekDays.map((d, i) => (
+                            <div key={i} className="text-[10px] text-zinc-400 tracking-wider uppercase font-bold">{d}</div>
+                        ))}
+                        {blanks.map(b => <div key={`b-${b}`} />)}
+                        {days.map(day => {
+                            const dateStr = formatDateString(year, month, day);
+                            const hasData = jazzData && jazzData[dateStr];
+                            const isSelected = selectedDate.getDate() === day &&
+                                selectedDate.getMonth() === month &&
+                                selectedDate.getFullYear() === year;
+                            const isToday = new Date().getDate() === day &&
+                                new Date().getMonth() === month &&
+                                new Date().getFullYear() === year;
+                            return (
+                                <button
+                                    key={day}
+                                    onClick={() => hasData && handleDayClick(day)}
+                                    disabled={!hasData}
+                                    className={`
+                                        relative text-xs py-2 w-full flex items-center justify-center transition-all rounded-sm
+                                        ${isSelected ? 'bg-amber-500 text-zinc-950 font-black shadow-[0_0_12px_rgba(245,158,11,0.5)]' : ''}
+                                        ${!isSelected && hasData ? 'hover:bg-zinc-800 text-white font-medium' : ''}
+                                        ${!hasData ? 'opacity-30 cursor-not-allowed text-zinc-500' : 'cursor-pointer'}
+                                        ${isToday && !isSelected ? 'text-amber-400 font-bold' : ''}
+                                    `}
+                                >
+                                    {day}
+                                    {hasData && !isSelected && (
+                                        <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-0.5 h-0.5 bg-amber-500 rounded-full"/>
+                                    )}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {/* 隨機探索 */}
+                    <RandomExplore
+                        jazzData={jazzData}
+                        onNavigate={(date) => { handleDateChange(date); setDrawerOpen(false); }}
+                    />
+                </div>
+            </div>
+
+            {/* 底部導航欄 */}
+            <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-zinc-950/95 backdrop-blur border-t border-white/20 h-14 flex items-center justify-between px-4">
+                {/* 前一天 */}
+                <button
+                    onClick={handlePrevDay}
+                    className="text-zinc-400 hover:text-amber-400 transition-colors p-2 font-bold text-lg"
+                >
+                    &#8592;
+                </button>
+
+                {/* 日期 + 日曆開關 */}
+                <button
+                    onClick={() => setDrawerOpen(v => !v)}
+                    className="flex items-center gap-2 text-sm font-bold tracking-wider text-white hover:text-amber-400 transition-colors"
+                >
+                    <CalendarIcon />
+                    <span>{dateLabel}</span>
+                </button>
+
+                {/* 後一天 */}
+                <button
+                    onClick={handleNextDay}
+                    className="text-zinc-400 hover:text-amber-400 transition-colors p-2 font-bold text-lg"
+                >
+                    &#8594;
+                </button>
+            </nav>
+        </>
+    );
+};

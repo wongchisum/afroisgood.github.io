@@ -9,6 +9,7 @@ import { DailyArticle } from './components/DailyArticle';
 import { EditorNote } from './components/EditorNote';
 import { IconDisc } from './components/Icons';
 import { AdminPanel } from './components/AdminPanel';
+import { MobileNav } from './components/MobileNav';
 
 const App = () => {
     const [isAdmin, setIsAdmin] = useState(window.location.hash === '#admin');
@@ -214,16 +215,28 @@ const App = () => {
                 showChangelog={showChangelog} setShowChangelog={setShowChangelog} changelogData={changelogData} 
             />
 
+            {/* 手機底部導航欄 + 日曆抽屜 */}
+            <MobileNav
+                selectedDate={selectedDate}
+                currentMonth={currentMonth}
+                setCurrentMonth={setCurrentMonth}
+                handleDateChange={handleDateChange}
+                handlePrevDay={handlePrevDay}
+                handleNextDay={handleNextDay}
+                jazzData={jazzData}
+                isPlaying={isPlaying}
+            />
+
             <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-12 gap-0 relative">
-                
-                <Sidebar 
+
+                <Sidebar
                     isPlaying={isPlaying} currentMonth={currentMonth} setCurrentMonth={setCurrentMonth}
                     selectedDate={selectedDate} handleDateChange={handleDateChange} jazzData={jazzData}
                     setShowChangelog={setShowChangelog} latestVersion={latestVersion}
                 />
-                
-                {/* 🌟 核心修正：大幅減少 pt-20 lg:pt-32 的上邊距，讓內容上移。石編的話(absolute)不會受影響。 */}
-                <div className="lg:col-span-9 relative p-6 lg:p-12 flex flex-col justify-start pt-4 lg:pt-8 min-h-screen">
+
+                {/* 手機加 pb-16 讓內容不被底部導航遮住 */}
+                <div className="lg:col-span-9 relative p-5 lg:p-12 flex flex-col justify-start pt-6 lg:pt-8 pb-20 lg:pb-0 min-h-screen">
                     
                     {/* 石編的話依然錨定在右上角角落 (absolute top-12 right-12) */}
                     {currentData?.editorNote?.trim() && (
