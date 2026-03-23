@@ -34,7 +34,7 @@ export const RandomExplore = ({ jazzData, onNavigate }) => {
             </div>
 
             <div className="bg-zinc-900 p-4 shadow-lg border border-white/20 rounded-md">
-                <p className="text-[11px] text-zinc-400 leading-relaxed mb-4 tracking-wide">
+                <p className="text-sm text-zinc-400 leading-relaxed mb-4 tracking-wide">
                     不知道聽什麼？<br />
                     讓命運替你選一張今日爵士。
                 </p>
@@ -42,7 +42,7 @@ export const RandomExplore = ({ jazzData, onNavigate }) => {
                 <button
                     onClick={handleSpin}
                     disabled={flipping}
-                    className="w-full py-3 bg-amber-500 text-zinc-950 text-[11px] font-black tracking-widest hover:bg-amber-400 hover:shadow-[0_0_15px_rgba(245,158,11,0.5)] disabled:opacity-50 transition-all rounded-sm uppercase flex items-center justify-center gap-2"
+                    className="w-full py-3 bg-amber-500 text-zinc-950 text-sm font-black tracking-widest hover:bg-amber-400 hover:shadow-[0_0_15px_rgba(245,158,11,0.5)] disabled:opacity-50 transition-all rounded-sm uppercase flex items-center justify-center gap-2"
                 >
                     {flipping ? (
                         <>
@@ -56,12 +56,12 @@ export const RandomExplore = ({ jazzData, onNavigate }) => {
 
                 {lastLabel && (
                     <div className="mt-3 pt-3 border-t border-white/10 page-reveal">
-                        <p className="text-[10px] text-zinc-500 tracking-widest mb-1 uppercase">已跳往</p>
-                        <p className="text-[11px] text-amber-400 font-bold tracking-wide">{lastLabel.date}</p>
-                        <p className="text-[11px] text-white font-medium mt-0.5 leading-snug">
+                        <p className="text-xs text-zinc-500 tracking-widest mb-1 uppercase">已跳往</p>
+                        <p className="text-sm text-amber-400 font-bold tracking-wide">{lastLabel.date}</p>
+                        <p className="text-sm text-white font-medium mt-0.5 leading-snug">
                             {lastLabel.artist}
                         </p>
-                        <p className="text-[10px] text-zinc-400 italic leading-snug">{lastLabel.album}</p>
+                        <p className="text-xs text-zinc-400 italic leading-snug">{lastLabel.album}</p>
                     </div>
                 )}
             </div>
