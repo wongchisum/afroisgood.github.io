@@ -39,16 +39,66 @@ export const DailyArticle = ({
         }
     };
 
+    const monthName = selectedDate.toLocaleDateString('en-US', { month: 'long' });
+
     if (!currentData) {
         return (
-            <div className="flex flex-col items-center justify-center h-64 opacity-30 text-center text-stone-900">
-                <IconDisc size={64} className="mb-4" />
-                <p className="font-zen text-xl tracking-widest uppercase">本日無資料</p>
+            <div className={`relative w-full max-w-5xl mx-auto transition-all duration-700 ease-out ${tearDirection === 'forward' ? 'opacity-0 -translate-x-10' : tearDirection === 'backward' ? 'opacity-0 translate-x-10' : 'opacity-100 translate-x-0'}`}>
+                <div className="relative flex flex-col items-center justify-center min-h-[65vh] text-center overflow-hidden px-6">
+
+                    {/* 大日期水印背景 */}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+                        <span className="font-playfair text-[16rem] lg:text-[22rem] font-black text-stone-900 leading-none opacity-[0.04]">
+                            {String(selectedDate.getDate()).padStart(2, '0')}
+                        </span>
+                    </div>
+
+                    {/* 頂部裝飾線 */}
+                    <div className="relative z-10 w-full max-w-xs mb-12">
+                        <div className="flex items-center gap-4">
+                            <div className="flex-1 h-[1px] bg-stone-900/20"></div>
+                            <span className="text-[9px] tracking-[0.4em] text-stone-500/60 font-bold uppercase">
+                                {String(selectedDate.getDate()).padStart(2, '0')} {monthName.toUpperCase()}
+                            </span>
+                            <div className="flex-1 h-[1px] bg-stone-900/20"></div>
+                        </div>
+                    </div>
+
+                    {/* 旋轉黑膠 */}
+                    <div className="relative z-10 mb-10">
+                        <IconDisc size={88} className="text-stone-500/30 animate-spin-slow" />
+                    </div>
+
+                    {/* 主標題 */}
+                    <div className="relative z-10 mb-6">
+                        <h2 className="font-playfair text-4xl lg:text-5xl font-black tracking-tight uppercase text-stone-500/50 mb-3">
+                            Rest & Listen
+                        </h2>
+                        <p className="font-zen text-xs tracking-[0.3em] text-stone-500/40">
+                            本日無推薦曲目
+                        </p>
+                    </div>
+
+                    {/* 爵士引言 */}
+                    <div className="relative z-10 max-w-xs mt-4">
+                        <p className="font-serif text-stone-500/40 text-base italic leading-relaxed">
+                            "Music is the silence between the notes."
+                        </p>
+                        <p className="text-[9px] tracking-[0.3em] text-stone-500/30 mt-3 uppercase">
+                            — Claude Debussy
+                        </p>
+                    </div>
+
+                    {/* 底部裝飾點 */}
+                    <div className="relative z-10 mt-14 flex items-center gap-2">
+                        <span className="w-1 h-1 rounded-full bg-stone-500/20"></span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500/30"></span>
+                        <span className="w-1 h-1 rounded-full bg-stone-500/20"></span>
+                    </div>
+                </div>
             </div>
         );
     }
-
-    const monthName = selectedDate.toLocaleDateString('en-US', { month: 'long' });
 
     return (
         <div className={`relative w-full max-w-5xl mx-auto transition-all duration-700 ease-out ${tearDirection === 'forward' ? 'opacity-0 -translate-x-10' : tearDirection === 'backward' ? 'opacity-0 translate-x-10' : 'opacity-100 translate-x-0'}`}>
