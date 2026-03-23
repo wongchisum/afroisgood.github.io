@@ -46,12 +46,40 @@ const App = () => {
     const currentData = jazzData[dateKey];
     
     useEffect(() => {
+        const siteBase = 'https://afroisgood.github.io';
+        const defaultTitle = '日めくりジャズ365 | 2026年版';
+        const defaultDesc = '每天一張爵士唱片推薦，365 天不間斷。Daily Jazz Almanac 2026。';
+        const defaultImage = siteBase + '/og-image.png';
+
+        const setMeta = (title, desc, image, url) => {
+            document.title = title;
+            const set = (sel, val) => { const el = document.querySelector(sel); if (el) el.setAttribute('content', val); };
+            set('meta[property="og:title"]', title);
+            set('meta[property="og:description"]', desc);
+            set('meta[property="og:image"]', image);
+            set('meta[property="og:url"]', url);
+            set('meta[name="twitter:title"]', title);
+            set('meta[name="twitter:description"]', desc);
+            set('meta[name="twitter:image"]', image);
+            set('meta[name="twitter:url"]', url);
+            set('meta[name="description"]', desc);
+        };
+
         if (currentData && currentData.album && currentData.artist) {
             const month = selectedDate.getMonth() + 1;
             const day = selectedDate.getDate();
-            document.title = `${month}月${day}日 | ${currentData.album} - ${currentData.artist}`;
+            const title = month + '月' + day + '日 | ' + currentData.album + ' - ' + currentData.artist;
+            const desc = currentData.content
+                ? currentData.content.slice(0, 80) + '...'
+                : currentData.artist + ' - ' + currentData.album;
+            const yId = getYouTubeVideoId(currentData.youtube);
+            const image = currentData.imageUrl
+                ? currentData.imageUrl
+                : yId ? 'https://img.youtube.com/vi/' + yId + '/maxresdefault.jpg'
+                : defaultImage;
+            setMeta(title, desc, image, siteBase + '/#' + dateKey);
         } else {
-            document.title = '日めくりジャズ365 | 2026年版';
+            setMeta(defaultTitle, defaultDesc, defaultImage, siteBase + '/');
         }
     }, [selectedDate, currentData]);
 
