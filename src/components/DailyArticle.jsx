@@ -1,7 +1,6 @@
 // src/components/DailyArticle.jsx
 import { useState } from 'react';
 import { EditorNote } from './EditorNote';
-import { SongRating } from './SongRating';
 import { IconDisc, IconArrowRight, IconQuote, IconShare, IconCheck } from './Icons';
 
 export const DailyArticle = ({
@@ -155,9 +154,6 @@ export const DailyArticle = ({
                         {currentData.content}
                     </div>
 
-                    <div className="border-t border-stone-300/60 pt-8 mt-auto">
-                        <SongRating dateKey={dateKey} />
-                    </div>
                 </div>
             </div>
         </div>
