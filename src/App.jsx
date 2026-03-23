@@ -40,10 +40,14 @@ const App = () => {
     const [isImmersive, setIsImmersive] = useState(false);
     
     const genreColors = { "Bebop": "#FDE68A", "Cool Jazz": "#BFDBFE", "Fusion": "#DDD6FE", "Swing": "#FECACA", "Hard Bop": "#FED7AA", "Free Jazz": "#E2E8F0" };
+    const formatDateString = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
-    // Mood 衍生色：從背景色推算深色 accent（用於淺背景）和亮色 glow（用於深色背景）
+    const dateKey = formatDateString(selectedDate);
+    const currentData = jazzData[dateKey];
+
+    // Mood 衍生色（必須在 currentData 之後計算）
     const hexToMoodVars = (hex) => {
-        const def = { accent: 'rgb(180,83,9)', glow: 'rgb(245,158,11)' }; // amber fallback
+        const def = { accent: 'rgb(180,83,9)', glow: 'rgb(245,158,11)' };
         if (!hex || !hex.startsWith('#') || hex.length < 7) return def;
         const r = parseInt(hex.slice(1, 3), 16);
         const g = parseInt(hex.slice(3, 5), 16);
@@ -53,10 +57,6 @@ const App = () => {
     };
     const moodHex = genreColors[currentData?.mood?.trim()] || (currentData?.mood?.startsWith('#') ? currentData.mood : null) || '#f2f0e9';
     const { accent: moodAccent, glow: moodGlow } = hexToMoodVars(moodHex);
-    const formatDateString = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-
-    const dateKey = formatDateString(selectedDate);
-    const currentData = jazzData[dateKey];
     
     useEffect(() => {
         const siteBase = 'https://afroisgood.github.io';
