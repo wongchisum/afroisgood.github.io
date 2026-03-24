@@ -160,18 +160,31 @@ export const DailyArticle = ({
                                 <span className="text-xs font-bold tracking-widest uppercase opacity-50">No Image Source</span>
                             </div>
                         )}
-
-                        {youtubeId && (
-                            <button
-                                onClick={() => setIsImmersive(true)}
-                                className="retro-btn absolute bottom-3 right-3"
-                                style={{ width: 'auto', padding: '4px 10px', fontSize: '9px', letterSpacing: '0.12em', gap: '4px' }}
-                            >
-                                <IconDisc className="animate-spin-slow" size={12} />
-                                VINYL
-                            </button>
-                        )}
                     </div>
+
+                    {youtubeId && (
+                        <button
+                            onClick={() => setIsImmersive(true)}
+                            className="w-full flex items-center justify-center gap-2 mt-2"
+                            style={{
+                                padding: '8px 0',
+                                fontSize: '9px',
+                                letterSpacing: '0.18em',
+                                fontFamily: "'Courier New', Courier, monospace",
+                                fontWeight: 'bold',
+                                background: '#fde8cc',
+                                color: '#b35c1a',
+                                border: '1.5px solid #f5c49a',
+                                cursor: 'pointer',
+                                transition: 'background 0.2s',
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.background = '#fbd9a8'}
+                            onMouseLeave={e => e.currentTarget.style.background = '#fde8cc'}
+                        >
+                            <IconDisc className="animate-spin-slow" size={11} />
+                            VINYL LISTENING
+                        </button>
+                    )}
                 </div>
 
                 {/* 右側：引言、內文、串流按鈕 */}

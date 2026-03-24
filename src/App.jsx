@@ -7,7 +7,7 @@ import { ImmersiveMode } from './components/ImmersiveMode';
 import { ChangelogModal } from './components/ChangelogModal';
 import { DailyArticle } from './components/DailyArticle';
 import { EditorNote } from './components/EditorNote';
-import { IconDisc } from './components/Icons';
+import { IconDisc, IconPlay, IconPause, IconX, IconMaximize } from './components/Icons';
 import { AdminPanel } from './components/AdminPanel';
 import { MobileNav } from './components/MobileNav';
 import { RetroMenuBar } from './components/RetroMenuBar';
@@ -34,6 +34,7 @@ const App = () => {
     const [tearDirection, setTearDirection] = useState(null);
     const [showChangelog, setShowChangelog] = useState(false);
     const [isImmersive, setIsImmersive] = useState(false);
+    const [isMinimized, setIsMinimized] = useState(false);
     
     const genreColors = { "Bebop": "#FDE68A", "Cool Jazz": "#BFDBFE", "Fusion": "#DDD6FE", "Swing": "#FECACA", "Hard Bop": "#FED7AA", "Free Jazz": "#E2E8F0" };
     const formatDateString = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -100,7 +101,7 @@ const App = () => {
     };
     
     const youtubeId = useMemo(() => getYouTubeVideoId(currentData?.youtube), [currentData]);
-    const { player, playerState } = useYouTubePlayer(isImmersive ? youtubeId : null);
+    const { player, playerState } = useYouTubePlayer((isImmersive || isMinimized) ? youtubeId : null);
     const isVinylSpinning = playerState === 1 || playerState === 3;
 
     const togglePlay = useCallback((e) => {
@@ -132,16 +133,29 @@ const App = () => {
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (e.key === 'Escape' && isImmersive) {
-                handleCloseImmersive();
+                if (isMinimized) {
+                    handleCloseImmersive();
+                } else {
+                    handleMinimizeImmersive();
+                }
             }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isImmersive]);
+    }, [isImmersive, isMinimized]);
 
     const handleCloseImmersive = () => {
         if (player && typeof player.pauseVideo === 'function') player.pauseVideo();
         setIsImmersive(false);
+        setIsMinimized(false);
+    };
+
+    const handleMinimizeImmersive = () => {
+        setIsMinimized(true);
+    };
+
+    const handleExpandImmersive = () => {
+        setIsMinimized(false);
     };
 
     const triggerTransition = (newDate) => {
@@ -240,11 +254,77 @@ const App = () => {
             {/* Fixed top menu bar */}
             <RetroMenuBar />
 
+            {/* YouTube player 掛載點 — 最小化時保持在 DOM 以維持播放 */}
+            {(isImmersive || isMinimized) && youtubeId && (
+                <div style={{ position: 'fixed', width: 1, height: 1, opacity: 0, pointerEvents: 'none', bottom: 0, left: 0, overflow: 'hidden' }}>
+                    <div id="yt-player-mount" style={{ width: '100%', height: '100%' }}></div>
+                </div>
+            )}
+
             <ImmersiveMode
-                isImmersive={isImmersive} handleCloseImmersive={handleCloseImmersive} selectedDate={selectedDate}
-                togglePlay={togglePlay} handlePrevDay={handlePrevDay} handleNextDay={handleNextDay}
-                youtubeId={youtubeId} currentData={currentData} isVinylSpinning={isVinylSpinning}
+                isImmersive={isImmersive} isMinimized={isMinimized}
+                handleCloseImmersive={handleCloseImmersive} handleMinimizeImmersive={handleMinimizeImmersive}
+                selectedDate={selectedDate} togglePlay={togglePlay}
+                handlePrevDay={handlePrevDay} handleNextDay={handleNextDay}
+                currentData={currentData} isVinylSpinning={isVinylSpinning}
             />
+
+            {/* 迷你播放器 — 最小化時顯示 */}
+            {isImmersive && isMinimized && (
+                <div
+                    className="fixed left-0 right-0 z-[300] flex items-center gap-3 px-4 py-2"
+                    style={{ bottom: 0, background: 'rgba(18,13,10,0.96)', borderTop: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(8px)' }}
+                >
+                    {/* 封面 / 黑膠碟 */}
+                    <div className={`w-10 h-10 rounded-full overflow-hidden border border-stone-700 flex-shrink-0 ${isVinylSpinning ? 'animate-spin-vinyl' : ''}`}>
+                        {currentData?.imageUrl ? (
+                            <img src={currentData.imageUrl} className="w-full h-full object-cover" alt="" />
+                        ) : (
+                            <div className="w-full h-full bg-stone-800 flex items-center justify-center">
+                                <IconDisc size={24} className="text-stone-600" />
+                            </div>
+                        )}
+                    </div>
+
+                    {/* 曲目資訊 */}
+                    <div className="flex-1 min-w-0">
+                        <p className="text-stone-100 truncate" style={{ fontSize: '11px', fontFamily: "'Courier New', monospace", fontWeight: 'bold', letterSpacing: '0.06em' }}>
+                            {currentData?.song || currentData?.album || '—'}
+                        </p>
+                        <p className="text-amber-500/70 truncate" style={{ fontSize: '10px', letterSpacing: '0.04em' }}>
+                            {currentData?.artist}
+                        </p>
+                    </div>
+
+                    {/* 控制按鈕 */}
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                        <button
+                            onClick={togglePlay}
+                            className="flex items-center justify-center rounded-full bg-stone-700 hover:bg-stone-600 text-stone-200 transition-colors"
+                            style={{ width: 32, height: 32 }}
+                            title={isVinylSpinning ? '暫停' : '播放'}
+                        >
+                            {isVinylSpinning ? <IconPause size={13} /> : <IconPlay size={13} />}
+                        </button>
+                        <button
+                            onClick={handleExpandImmersive}
+                            className="flex items-center justify-center rounded-full bg-stone-700 hover:bg-stone-600 text-stone-200 transition-colors"
+                            style={{ width: 32, height: 32 }}
+                            title="展開"
+                        >
+                            <IconMaximize size={13} />
+                        </button>
+                        <button
+                            onClick={handleCloseImmersive}
+                            className="flex items-center justify-center rounded-full bg-stone-800 hover:bg-stone-700 text-stone-500 hover:text-stone-300 transition-colors"
+                            style={{ width: 32, height: 32 }}
+                            title="關閉"
+                        >
+                            <IconX size={13} />
+                        </button>
+                    </div>
+                </div>
+            )}
             <ChangelogModal
                 showChangelog={showChangelog} setShowChangelog={setShowChangelog} changelogData={changelogData}
             />
