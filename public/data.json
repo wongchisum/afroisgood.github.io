@@ -94,7 +94,7 @@
       "date": "2026-01-07",
       "song": "",
       "artist": "GEORGE BENSON",
-      "album": "BREEZIN'",
+      "album": "BREEZIN‘",
       "youtube": "https://www.youtube.com/watch?v=G1QjyskJ9jw",
       "spotify": "https://open.spotify.com/album/1ei5QjnfB7PHINJOH8Gft5",
       "appleMusic": "https://music.apple.com/us/album/breezin/1018562855?l=zh-Hant-TW",
@@ -529,7 +529,7 @@
       "date": "2026-02-05",
       "song": "",
       "artist": "Ken Colyer's Jazzmen",
-      "album": "Ken Colyer's Jazzmen Read More – Watch That Dirty Tone Of Yours...There Are Ladies Present!",
+      "album": "Ken Colyer's Jazzmen  Read More  – Watch That Dirty Tone Of Yours...There Are Ladies Present!",
       "youtube": "https://www.youtube.com/watch?v=PFjec7UTnJo",
       "spotify": "https://open.spotify.com/album/3zuqtUNwToUM6RBCVlFuLR",
       "appleMusic": "https://music.apple.com/us/album/watch-that-dirty-tone-of-yours-there-are-ladies-present/1435632366?l=zh-Hant-TW",
@@ -716,7 +716,7 @@
       "other": "",
       "imageUrl": "https://upload.wikimedia.org/wikipedia/en/3/3f/Tes_Esat.jpg",
       "quote": "",
-      "content": "優秀な弟がいると色々と大変だ、ということでフリーの道に進んだお兄さん。\nA・シェップのグループで渡欧した際のリーダー作だけど、\nメンバー含め破壊的な音を拡散するだけのまとまりのない凡庸セッションになってしまった。\n\n這位兄長，因為有個優異的弟弟（註1）而經歷各般艱辛，進而轉向自由爵士之路。\n此張專輯是與艾奇·薛普（Archie Shepp）（註2）赴歐時期，所錄製的主導作品。\n然而，包含團員在內，僅僅只是一張擴散充滿破壞性噪音，毫無凝聚力的一張平凡錄音作品罷了。\n\n註1：優秀的弟弟，此處指 Wayne Shorter ，美國薩克斯風樂手、作曲家。曾於 1959 年加入咆勃爵士傳奇樂團 Art Blakey and Jazz Messengers（推薦代表作：Moanin' ），並在 1970 年與 Joe Zawinul 創立 Fusion Jazz 代表樂團 Weather Report（推薦代表作：Teen Town）。生涯共獲得 12 座葛萊美獎。\n\n註2：Archie Shepp，美國薩克斯風樂手、作曲家及詩人。曾於 1960 年代初與自由爵士先驅 Cecil Taylor 合作，並在 1965 年受 John Coltrane 提攜參與前衛經典專輯《Ascension》的錄製。其作品常融入強烈的非裔美國人權意識與詩歌元素，是自由爵士（Free Jazz）與先鋒爵士（Avant-Garde Jazz）運動的領軍人物（推薦代表作：《Goin' Home》）。生涯曾獲得葛萊美獎提名，並於 2016 年獲頒 NEA Jazz Masters 終身成就獎。",
+      "content": "優秀な弟がいると色々と大変だ、ということでフリーの道に進んだお兄さん。\nA・シェップのグループで渡欧した際のリーダー作だけど、\nメンバー含め破壊的な音を拡散するだけのまとまりのない凡庸セッションになってしまった。\n\n這位兄長，因為有個優異的弟弟（註1）而經歷各般艱辛，進而轉向自由爵士之路。\n此張專輯是與艾奇·薛普（Archie Shepp）（註2）赴歐時期，所錄製的主導作品。\n然而，包含團員在內，僅僅只是一張擴散充滿破壞性噪音，毫無凝聚力的一張平凡錄音作品罷了。\n\n註1：優秀的弟弟，此處指 Wayne Shorter ，美國薩克斯風樂手、作曲家。曾於 1959 年加入咆勃爵士傳奇樂團 Art Blakey and Jazz Messengers（推薦代表作：Moanin’ ），並在 1970 年與 Joe Zawinul 創立 Fusion Jazz 代表樂團 Weather Report（推薦代表作：Teen Town）。生涯共獲得 12 座葛萊美獎。\n\n註2：Archie Shepp，美國薩克斯風樂手、作曲家及詩人。曾於 1960 年代初與自由爵士先驅 Cecil Taylor 合作，並在 1965 年受 John Coltrane 提攜參與前衛經典專輯《Ascension》的錄製。其作品常融入強烈的非裔美國人權意識與詩歌元素，是自由爵士（Free Jazz）與先鋒爵士（Avant-Garde Jazz）運動的領軍人物（推薦代表作：《Goin’ Home》）。生涯曾獲得葛萊美獎提名，並於 2016 年獲頒 NEA Jazz Masters 終身成就獎。",
       "editorNote": "",
       "mood": "#C7D2FE"
     },
@@ -737,6 +737,11 @@
     }
   ],
   "changelog": [
+    {
+      "version": "v1.4.0",
+      "date": "2026-03-24",
+      "content": "Vinyl 聆聽按鈕移至專輯封面正下方，改為等寬橘色設計，更易發現。\n新增沉浸式聆聽「最小化」功能，可縮小為底部播放器，邊聽邊閱讀介紹。\n迷你播放器支援播放／暫停、展開全螢幕、關閉。\n修正行動版迷你播放器與底部導覽列重疊問題。\n修正切換第三個日期時畫面不更新的錯誤。\n移除未使用的 papaparse 套件與 JazzPixelArt 元件，精簡專案結構。"
+    },
     {
       "version": "v1.3.0",
       "date": "2026-03-23",
