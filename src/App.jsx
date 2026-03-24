@@ -287,8 +287,8 @@ const App = () => {
             {/* 迷你播放器 — 最小化時顯示 */}
             {isImmersive && isMinimized && (
                 <div
-                    className="fixed left-0 right-0 z-[300] flex items-center gap-3 px-4 py-2"
-                    style={{ bottom: 0, background: 'rgba(18,13,10,0.96)', borderTop: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(8px)' }}
+                    className="fixed left-0 right-0 z-[300] flex items-center gap-3 px-4 py-2 bottom-14 lg:bottom-0"
+                    style={{ background: 'rgba(18,13,10,0.96)', borderTop: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(8px)' }}
                 >
                     {/* 封面 / 黑膠碟 */}
                     <div className={`w-10 h-10 rounded-full overflow-hidden border border-stone-700 flex-shrink-0 ${isVinylSpinning ? 'animate-spin-vinyl' : ''}`}>
