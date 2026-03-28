@@ -191,7 +191,7 @@ export const DailyArticle = ({
                 <div className="lg:col-span-7 flex flex-col justify-between pt-2 min-h-[420px]">
                     <div className="flex-1">
                         {currentData?.editorNote?.trim() && (
-                            <div className="mb-10 lg:hidden">
+                            <div className="mb-8">
                                 <EditorNote note={currentData.editorNote} />
                             </div>
                         )}

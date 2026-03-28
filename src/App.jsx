@@ -435,13 +435,6 @@ const App = () => {
                         {/* Content layer */}
                         <div className="relative" style={{ zIndex: 1 }}>
 
-                            {/* Editor note — desktop top-right */}
-                            {currentData?.editorNote?.trim() && (
-                                <div className="absolute top-8 right-8 z-40 max-w-[280px] hidden lg:block">
-                                    <EditorNote note={currentData.editorNote} />
-                                </div>
-                            )}
-
                             {/* Ghost date watermark */}
                             <div className="absolute top-0 right-0 lg:right-16 -z-10 select-none pointer-events-none" style={{ opacity: 0.03 }}>
                                 <span className="font-playfair leading-none text-stone-900" style={{ fontSize: 'clamp(10rem, 20vw, 22rem)' }}>
