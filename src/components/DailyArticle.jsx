@@ -44,7 +44,7 @@ export const DailyArticle = ({
 
     if (!currentData) {
         return (
-            <div className={`relative w-full max-w-5xl mx-auto transition-all duration-700 ease-out ${tearDirection === 'forward' ? 'opacity-0 -translate-x-10' : tearDirection === 'backward' ? 'opacity-0 translate-x-10' : 'opacity-100 translate-x-0'}`}>
+            <div className={`relative w-full max-w-5xl mx-auto ${tearDirection === 'forward' ? 'flip-page-out-forward' : tearDirection === 'backward' ? 'flip-page-out-backward' : 'flip-page-in'}`}>
                 <div className="relative flex flex-col items-center justify-center min-h-[65vh] text-center overflow-hidden px-6">
 
                     {/* 大日期水印背景 */}
@@ -102,7 +102,7 @@ export const DailyArticle = ({
     }
 
     return (
-        <div className={`relative w-full max-w-5xl mx-auto transition-all duration-700 ease-out ${tearDirection === 'forward' ? 'opacity-0 -translate-x-10' : tearDirection === 'backward' ? 'opacity-0 translate-x-10' : 'opacity-100 translate-x-0'}`}>
+        <div className={`relative w-full max-w-5xl mx-auto ${tearDirection === 'forward' ? 'flip-page-out-forward' : tearDirection === 'backward' ? 'flip-page-out-backward' : 'flip-page-in'}`}>
 
             {/* 復古爵士海報文字裝飾 */}
             <VintageJazzText />

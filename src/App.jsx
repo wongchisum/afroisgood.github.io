@@ -417,6 +417,7 @@ const App = () => {
                             </div>
 
                             <DailyArticle
+                                key={dateKey}
                                 currentData={currentData}
                                 selectedDate={selectedDate}
                                 tearDirection={tearDirection}
