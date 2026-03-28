@@ -11,7 +11,6 @@ import { IconDisc, IconPlay, IconPause, IconX, IconMaximize } from './components
 import { AdminPanel } from './components/AdminPanel';
 import { MobileNav } from './components/MobileNav';
 import { RetroMenuBar } from './components/RetroMenuBar';
-import { SkeletonLoader } from './components/SkeletonLoader';
 
 const App = () => {
     const [isAdmin, setIsAdmin] = useState(window.location.hash === '#admin');
@@ -237,7 +236,30 @@ const App = () => {
         fetchAllData();
     }, []);
 
-    if (loading) return <SkeletonLoader />;
+    if (loading) return (
+        <div className="retro-desktop min-h-screen flex flex-col items-center justify-center p-6 text-center">
+            <div className="retro-win" style={{ width: '480px', maxWidth: '90vw' }}>
+                <div className="retro-titlebar" style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+                    <span className="retro-ctrl">&#215;</span>
+                    <span className="retro-ctrl">&#8722;</span>
+                    <span className="retro-ctrl">&#9633;</span>
+                    <span style={{ flex: 1, textAlign: 'center', fontSize: '13px', letterSpacing: '0.18em' }}>DAILY JAZZ ALMANAC</span>
+                </div>
+                <div className="retro-body" style={{ padding: '48px 40px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+                    <IconDisc className="animate-spin-fast" size={64} style={{ color: '#7a5840', opacity: 0.7 }} />
+                    <p style={{ fontFamily: "'Courier New', Courier, monospace", fontSize: '13px', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#3a2010', lineHeight: 1.8 }}>
+                        JAZZ，是一種帶著焦臭味<br />撲面而來的文字
+                    </p>
+                    <p style={{ fontFamily: "'Courier New', Courier, monospace", fontSize: '11px', color: '#8a6848', letterSpacing: '0.25em' }}>
+                        — 平岡正明
+                    </p>
+                    <p style={{ fontFamily: "'Courier New', Courier, monospace", fontSize: '10px', color: '#b09878', letterSpacing: '0.2em', marginTop: '4px', opacity: 0.7 }}>
+                        Loading…
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
     
     const latestVersion = changelogData[0]?.version || "v1.0.0";
 
