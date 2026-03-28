@@ -196,12 +196,14 @@ export const DailyArticle = ({
                             </div>
                         )}
 
-                        <div className="relative pl-8 mb-10">
-                            <span className="absolute left-0 -top-2 text-6xl font-serif leading-none transition-colors duration-1000" style={{ color: 'var(--mood-accent)', opacity: 0.35 }}>"</span>
-                            <blockquote className="text-xl lg:text-2xl font-medium text-stone-900 leading-relaxed font-serif text-justify pt-2">
-                                {currentData.quote}
-                            </blockquote>
-                        </div>
+                        {currentData.quote?.trim() && (
+                            <div className="relative pl-8 mb-10">
+                                <span className="absolute left-0 -top-2 text-6xl font-serif leading-none transition-colors duration-1000" style={{ color: 'var(--mood-accent)', opacity: 0.35 }}>"</span>
+                                <blockquote className="text-xl lg:text-2xl font-medium text-stone-900 leading-relaxed font-serif text-justify pt-2">
+                                    {currentData.quote}
+                                </blockquote>
+                            </div>
+                        )}
 
                         <div className="prose prose-stone font-zen leading-relaxed text-stone-700 whitespace-pre-line text-[15px] lg:text-base">
                             {currentData.content}
