@@ -208,10 +208,7 @@ const App = () => {
             // 從 data.json 讀取所有資料（單一資料來源）
             // Promise.all 確保 skeleton 至少顯示 800ms，避免快速網路下一閃即逝
             try {
-                const [res] = await Promise.all([
-                    fetch('/data.json'),
-                    new Promise(resolve => setTimeout(resolve, 800)),
-                ]);
+                const res = await fetch('/data.json');
                 const data = await res.json();
                 // 支援新格式 { entries, changelog } 或舊格式（純陣列）
                 const arr = Array.isArray(data) ? data : (data.entries || []);
@@ -230,8 +227,7 @@ const App = () => {
                 setCurrentMonth(new Date(initialDate.getFullYear(), initialDate.getMonth(), 1));
             }
 
-            setLoading(false);
-            setTimeout(() => setIsPlaying(true), 400);
+            setTimeout(() => { setLoading(false); setIsPlaying(true); }, 2000);
         };
         fetchAllData();
     }, []);
