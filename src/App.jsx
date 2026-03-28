@@ -123,6 +123,8 @@ const App = () => {
             }
         }
     }, [player, playerState]);
+    const togglePlayRef = useRef(togglePlay);
+    togglePlayRef.current = togglePlay;
 
     // 空 deps：只註冊一次，透過 ref 永遠讀到最新狀態
     useEffect(() => {
@@ -142,17 +144,47 @@ const App = () => {
 
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.key === 'Escape' && isImmersive) {
-                if (isMinimized) {
-                    handleCloseImmersive();
-                } else {
-                    handleMinimizeImmersive();
-                }
+            // 輸入框內不觸發快捷鍵
+            const tag = document.activeElement?.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
+
+            switch (e.key) {
+                case 'Escape':
+                    if (isImmersive) {
+                        isMinimized ? handleCloseImmersive() : handleMinimizeImmersive();
+                    }
+                    break;
+                case 'ArrowLeft':
+                    if (!isImmersive && !tearDirection) {
+                        e.preventDefault();
+                        const prev = new Date(selectedDateRef.current);
+                        prev.setDate(prev.getDate() - 1);
+                        window.location.hash = formatDateString(prev);
+                    }
+                    break;
+                case 'ArrowRight':
+                    if (!isImmersive && !tearDirection) {
+                        e.preventDefault();
+                        const next = new Date(selectedDateRef.current);
+                        next.setDate(next.getDate() + 1);
+                        window.location.hash = formatDateString(next);
+                    }
+                    break;
+                case 'i':
+                case 'I':
+                    if (!isImmersive && youtubeId) setIsImmersive(true);
+                    break;
+                case ' ':
+                    if (isImmersive || isMinimized) {
+                        e.preventDefault();
+                        togglePlayRef.current();
+                    }
+                    break;
             }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isImmersive, isMinimized]);
+    }, [isImmersive, isMinimized, tearDirection, youtubeId]);
 
     const handleCloseImmersive = () => {
         if (player && typeof player.pauseVideo === 'function') player.pauseVideo();
