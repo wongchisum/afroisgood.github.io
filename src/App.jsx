@@ -155,7 +155,7 @@ const App = () => {
                     }
                     break;
                 case 'ArrowLeft':
-                    if (!isImmersive && !tearDirection) {
+                    if (!tearDirection) {
                         e.preventDefault();
                         const prev = new Date(selectedDateRef.current);
                         prev.setDate(prev.getDate() - 1);
@@ -163,7 +163,7 @@ const App = () => {
                     }
                     break;
                 case 'ArrowRight':
-                    if (!isImmersive && !tearDirection) {
+                    if (!tearDirection) {
                         e.preventDefault();
                         const next = new Date(selectedDateRef.current);
                         next.setDate(next.getDate() + 1);
