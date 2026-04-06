@@ -290,11 +290,14 @@ export const Sidebar = ({
                         color: '#9a7860',
                         letterSpacing: '0.03em',
                     }}>
-                        <p>© 2026 ジャズ録音日調査委員会</p>
-                        <p>Text, curation &amp; translations by the site author.</p>
-                        <p>Music rights belong to their respective holders.</p>
-                        <p style={{ marginTop: '6px' }}>
-                            Corrections &amp; feedback：和煦人 —{' '}
+                        <p>© 2026 ジャズ録音日調査委員会. All editorial rights reserved.</p>
+                        <p>All Chinese translations are independently produced by the site author</p>
+                        <p>and do not represent official translations of any source material.</p>
+                        <p>Music and recordings remain the property of their respective rights holders.</p>
+                        <p style={{ marginTop: '6px' }}>For corrections or feedback, please contact:</p>
+                        <p>如有任何指正或回饋，歡迎來信：</p>
+                        <p>
+                            和煦人 —{' '}
                             <a href="mailto:monkeyboy2766@gmail.com" style={{ color: '#7a5840', textDecoration: 'underline' }}>
                                 monkeyboy2766@gmail.com
                             </a>
