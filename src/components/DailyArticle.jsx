@@ -1,5 +1,5 @@
 // src/components/DailyArticle.jsx
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { EditorNote } from './EditorNote';
 import { IconDisc, IconArrowRight, IconQuote, IconShare, IconCheck } from './Icons';
 import { VintageJazzText } from './VintageJazzText';
@@ -13,6 +13,11 @@ export const DailyArticle = ({
     setIsImmersive,
 }) => {
     const [isCopied, setIsCopied] = useState(false);
+    const copyTimerRef = useRef(null);
+
+    useEffect(() => {
+        return () => { if (copyTimerRef.current) clearTimeout(copyTimerRef.current); };
+    }, []);
 
     const dateKey = formatDateString(selectedDate);
 
@@ -31,7 +36,8 @@ export const DailyArticle = ({
             try {
                 await navigator.clipboard.writeText(`${shareData.text} \n${shareData.url}`);
                 setIsCopied(true);
-                setTimeout(() => setIsCopied(false), 2000); 
+                if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+                copyTimerRef.current = setTimeout(() => setIsCopied(false), 2000);
             } catch (err) { console.error('複製失敗', err); }
         }
     };

@@ -28,7 +28,7 @@ export const isAtMinMonth = (currentMonth) =>
  * 規則：
  *   - 過去日期 → 直接顯示
  *   - 未來日期 → 隱藏
- *   - 今天     → 需等到臺灣時間（UTC+8）上午 10:00 後才顯示
+ *   - 今天     → 需等到臺灣時間（UTC+8）上午 07:00 後才顯示
  *
  * @param {string} dateStr - "YYYY-MM-DD" 格式
  * @returns {boolean}

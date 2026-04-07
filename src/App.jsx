@@ -14,6 +14,16 @@ import { MobileNav } from './components/MobileNav';
 import { RetroMenuBar } from './components/RetroMenuBar';
 import { RetroTitleBar } from './components/RetroTitleBar';
 
+const hexToMoodVars = (hex) => {
+    const def = { accent: 'rgb(180,83,9)', glow: 'rgb(245,158,11)' };
+    if (!hex || !hex.startsWith('#') || hex.length < 7) return def;
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    const ac = (f) => Math.round(Math.min(255, r * f)) + ',' + Math.round(Math.min(255, g * f)) + ',' + Math.round(Math.min(255, b * f));
+    return { accent: `rgb(${ac(0.38)})`, glow: `rgb(${ac(0.78)})` };
+};
+
 const App = () => {
     const [isAdmin, setIsAdmin] = useState(window.location.hash === '#admin');
 
@@ -42,7 +52,7 @@ const App = () => {
 
     const dateKey = formatDateString(selectedDate);
 
-    // 僅對外開放「今天臺灣時間 10:00 後」或「過去」的日期
+    // 僅對外開放「今天臺灣時間 07:00 後」或「過去」的日期
     const visibleJazzData = useMemo(() => {
         const result = {};
         Object.keys(jazzData).forEach(k => {
@@ -53,16 +63,6 @@ const App = () => {
 
     const currentData = visibleJazzData[dateKey];
 
-    // Mood 衍生色（必須在 currentData 之後計算）
-    const hexToMoodVars = (hex) => {
-        const def = { accent: 'rgb(180,83,9)', glow: 'rgb(245,158,11)' };
-        if (!hex || !hex.startsWith('#') || hex.length < 7) return def;
-        const r = parseInt(hex.slice(1, 3), 16);
-        const g = parseInt(hex.slice(3, 5), 16);
-        const b = parseInt(hex.slice(5, 7), 16);
-        const ac = (f) => Math.round(Math.min(255, r * f)) + ',' + Math.round(Math.min(255, g * f)) + ',' + Math.round(Math.min(255, b * f));
-        return { accent: `rgb(${ac(0.38)})`, glow: `rgb(${ac(0.78)})` };
-    };
     const moodHex = genreColors[currentData?.mood?.trim()] || (currentData?.mood?.startsWith('#') ? currentData.mood : null) || '#f2f0e9';
     const { accent: moodAccent, glow: moodGlow } = hexToMoodVars(moodHex);
     
