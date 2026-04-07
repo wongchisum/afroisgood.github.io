@@ -76,7 +76,6 @@ export const CalendarGrid = ({ year, month, selectedDate, jazzData, onDayClick, 
                     ...baseStyle,
                     color: 'var(--mood-glow)',
                     fontWeight: 700,
-                    textDecoration: 'underline',
                 };
 
                 const currentStyle = isSelected ? selectedStyle : isToday ? todayStyle : baseStyle;
@@ -97,6 +96,22 @@ export const CalendarGrid = ({ year, month, selectedDate, jazzData, onDayClick, 
                         }}
                     >
                         {day}
+                        {isToday && !isSelected && (
+                            <img
+                                src="/favicon.svg"
+                                alt=""
+                                style={{
+                                    position: 'absolute',
+                                    top: '-8px',
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
+                                    width: '9px',
+                                    height: '9px',
+                                    opacity: 0.9,
+                                    pointerEvents: 'none',
+                                }}
+                            />
+                        )}
                         {hasData && !isSelected && (
                             <span style={{
                                 position: 'absolute',
