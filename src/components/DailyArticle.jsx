@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { EditorNote } from './EditorNote';
 import { IconDisc, IconArrowRight, IconQuote, IconShare, IconCheck } from './Icons';
 import { VintageJazzText } from './VintageJazzText';
+import { formatDateString } from '../utils/dateUtils';
 
 export const DailyArticle = ({
     currentData,
@@ -13,7 +14,7 @@ export const DailyArticle = ({
 }) => {
     const [isCopied, setIsCopied] = useState(false);
 
-    const dateKey = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+    const dateKey = formatDateString(selectedDate);
 
     const handleShare = async () => {
         const now = new Date();

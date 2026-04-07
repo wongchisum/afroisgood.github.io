@@ -1,6 +1,8 @@
 // src/components/Sidebar.jsx
 import { IconDisc } from './Icons';
 import { RandomExplore } from './RandomExplore';
+import { CalendarGrid } from './CalendarGrid';
+import { formatDateString } from '../utils/dateUtils';
 
 export const Sidebar = ({
     isPlaying,
@@ -16,17 +18,8 @@ export const Sidebar = ({
     const year  = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
 
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const firstDay    = new Date(year, month, 1).getDay();
-    const days        = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-    const blanks      = Array.from({ length: firstDay  }, (_, i) => i);
-    const weekDays    = ['S','M','T','W','T','F','S'];
-
     const handlePrevMonth = () => setCurrentMonth(new Date(year, month - 1, 1));
     const handleNextMonth = () => setCurrentMonth(new Date(year, month + 1, 1));
-
-    const formatDateString = (y, m, d) =>
-        `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 
     return (
         <aside
@@ -97,85 +90,14 @@ export const Sidebar = ({
                         </div>
 
                         {/* Day grid */}
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '2px 1px', textAlign: 'center' }}>
-                            {weekDays.map((d, i) => (
-                                <div key={i} style={{
-                                    fontFamily: "'Courier New', Courier, monospace",
-                                    fontSize: '8px',
-                                    color: '#9a7860',
-                                    fontWeight: 'bold',
-                                    letterSpacing: '0.05em',
-                                    paddingBottom: '4px',
-                                }}>
-                                    {d}
-                                </div>
-                            ))}
-                            {blanks.map(b => <div key={`b-${b}`} />)}
-                            {days.map(day => {
-                                const dateStr   = formatDateString(year, month, day);
-                                const hasData   = jazzData && jazzData[dateStr];
-                                const isSelected = selectedDate.getDate() === day
-                                    && selectedDate.getMonth() === month
-                                    && selectedDate.getFullYear() === year;
-                                const isToday    = new Date().getDate() === day
-                                    && new Date().getMonth() === month
-                                    && new Date().getFullYear() === year;
-
-                                const baseStyle = {
-                                    fontFamily: "'Courier New', Courier, monospace",
-                                    fontSize: '12px',
-                                    padding: '3px 0',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    position: 'relative',
-                                    cursor: hasData ? 'pointer' : 'default',
-                                    opacity: !hasData ? 0.22 : 1,
-                                    transition: 'background 0.1s',
-                                };
-
-                                const selectedStyle = {
-                                    ...baseStyle,
-                                    backgroundColor: 'var(--mood-glow)',
-                                    color: '#1a0808',
-                                    fontWeight: 900,
-                                    outline: '1px solid var(--mood-accent)',
-                                };
-
-                                const todayStyle = {
-                                    ...baseStyle,
-                                    color: 'var(--mood-accent)',
-                                    fontWeight: 700,
-                                    textDecoration: 'underline',
-                                };
-
-                                return (
-                                    <button
-                                        key={day}
-                                        onClick={() => handleDateChange(new Date(year, month, day))}
-                                        disabled={!hasData}
-                                        style={isSelected ? selectedStyle : isToday ? todayStyle : { ...baseStyle, color: '#2a1808' }}
-                                        onMouseEnter={e => { if (!isSelected && hasData) e.currentTarget.style.backgroundColor = '#e0d0c4'; }}
-                                        onMouseLeave={e => { if (!isSelected) e.currentTarget.style.backgroundColor = ''; }}
-                                    >
-                                        {day}
-                                        {hasData && !isSelected && (
-                                            <span style={{
-                                                position: 'absolute',
-                                                bottom: 0,
-                                                left: '50%',
-                                                transform: 'translateX(-50%)',
-                                                width: '3px',
-                                                height: '3px',
-                                                borderRadius: '50%',
-                                                backgroundColor: 'var(--mood-glow)',
-                                                opacity: 0.5,
-                                            }} />
-                                        )}
-                                    </button>
-                                );
-                            })}
-                        </div>
+                        <CalendarGrid
+                            year={year}
+                            month={month}
+                            selectedDate={selectedDate}
+                            jazzData={jazzData}
+                            onDayClick={handleDateChange}
+                            theme="light"
+                        />
                     </div>
 
                     {/* Random Explore */}

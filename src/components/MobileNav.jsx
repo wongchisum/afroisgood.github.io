@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { IconDisc } from './Icons';
 import { RandomExplore } from './RandomExplore';
+import { CalendarGrid } from './CalendarGrid';
+import { formatDateString } from '../utils/dateUtils';
 
 const CalendarIcon = () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -34,20 +36,12 @@ export const MobileNav = ({
 
     const year = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const firstDay = new Date(year, month, 1).getDay();
-    const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-    const blanks = Array.from({ length: firstDay }, (_, i) => i);
-    const weekDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-
-    const formatDateString = (y, m, d) =>
-        `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 
     const handlePrevMonth = () => setCurrentMonth(new Date(year, month - 1, 1));
     const handleNextMonth = () => setCurrentMonth(new Date(year, month + 1, 1));
 
-    const handleDayClick = (day) => {
-        handleDateChange(new Date(year, month, day));
+    const handleDayClick = (date) => {
+        handleDateChange(date);
         setDrawerOpen(false);
     };
 
@@ -97,39 +91,15 @@ export const MobileNav = ({
                     </div>
 
                     {/* 日曆 Grid */}
-                    <div className="grid grid-cols-7 gap-y-2 gap-x-1 text-center mb-2">
-                        {weekDays.map((d, i) => (
-                            <div key={i} className="text-[10px] text-zinc-400 tracking-wider uppercase font-bold">{d}</div>
-                        ))}
-                        {blanks.map(b => <div key={`b-${b}`} />)}
-                        {days.map(day => {
-                            const dateStr = formatDateString(year, month, day);
-                            const hasData = jazzData && jazzData[dateStr];
-                            const isSelected = selectedDate.getDate() === day &&
-                                selectedDate.getMonth() === month &&
-                                selectedDate.getFullYear() === year;
-                            const isToday = new Date().getDate() === day &&
-                                new Date().getMonth() === month &&
-                                new Date().getFullYear() === year;
-                            return (
-                                <button
-                                    key={day}
-                                    onClick={() => hasData && handleDayClick(day)}
-                                    disabled={!hasData}
-                                    className={`
-                                        relative text-xs py-2 w-full flex items-center justify-center transition-all rounded-sm
-                                        ${!isSelected && hasData ? 'hover:bg-zinc-800 text-white font-medium' : ''}
-                                        ${!hasData ? 'opacity-30 cursor-not-allowed text-zinc-500' : 'cursor-pointer'}
-                                    `}
-                                    style={isSelected ? { backgroundColor: 'var(--mood-glow)', color: '#09090b', fontWeight: 900 } : isToday ? { color: 'var(--mood-glow)', fontWeight: 700 } : {}}
-                                >
-                                    {day}
-                                    {hasData && !isSelected && (
-                                        <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-0.5 h-0.5 rounded-full" style={{ backgroundColor: 'var(--mood-glow)' }}/>
-                                    )}
-                                </button>
-                            );
-                        })}
+                    <div className="mb-2">
+                        <CalendarGrid
+                            year={year}
+                            month={month}
+                            selectedDate={selectedDate}
+                            jazzData={jazzData}
+                            onDayClick={handleDayClick}
+                            theme="dark"
+                        />
                     </div>
 
                     {/* 隨機探索 */}
