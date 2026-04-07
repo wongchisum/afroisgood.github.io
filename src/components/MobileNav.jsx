@@ -1,9 +1,10 @@
 // src/components/MobileNav.jsx
 // 手機專用底部導航欄 + 日曆抽屜（lg 以上隱藏）
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IconDisc, IconCalendar, IconClose } from './Icons';
 import { RandomExplore } from './RandomExplore';
 import { CalendarGrid } from './CalendarGrid';
+import { CopyrightFooter } from './CopyrightFooter';
 import { formatDateString, isAtMinMonth } from '../utils/dateUtils';
 
 export const MobileNav = ({
@@ -17,6 +18,11 @@ export const MobileNav = ({
     isPlaying,
 }) => {
     const [drawerOpen, setDrawerOpen] = useState(false);
+
+    useEffect(() => {
+        document.body.style.overflow = drawerOpen ? 'hidden' : '';
+        return () => { document.body.style.overflow = ''; };
+    }, [drawerOpen]);
 
     const year = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
@@ -99,32 +105,7 @@ export const MobileNav = ({
                     />
 
                     {/* 版權聲明 */}
-                    <div style={{
-                        marginTop: '24px',
-                        paddingTop: '16px',
-                        borderTop: '1px solid rgba(255,255,255,0.08)',
-                        fontFamily: "'Courier New', Courier, monospace",
-                        fontSize: '9px',
-                        lineHeight: 1.9,
-                        color: 'rgba(255,255,255,0.3)',
-                        letterSpacing: '0.03em',
-                    }}>
-                        <p>© 2026 ジャズ録音日調査委員会. All editorial rights reserved.</p>
-                        <p>All Chinese translations are independently produced by the site author</p>
-                        <p>and do not represent official translations of any source material.</p>
-                        <p>Music and recordings remain the property of their respective rights holders.</p>
-                        <p style={{ marginTop: '8px' }}>For corrections or feedback, please contact:</p>
-                        <p>如有任何指正或回饋，歡迎來信：</p>
-                        <p>
-                            和煦人 —{' '}
-                            <a
-                                href="mailto:monkeyboy2766@gmail.com"
-                                style={{ color: 'rgba(255,255,255,0.5)', textDecoration: 'underline' }}
-                            >
-                                monkeyboy2766@gmail.com
-                            </a>
-                        </p>
-                    </div>
+                    <CopyrightFooter theme="dark" />
                 </div>
             </div>
 

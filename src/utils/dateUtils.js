@@ -38,7 +38,14 @@ export const isDateVisible = (dateStr) => {
     if (dateStr < todayStr) return true;   // 過去：永遠顯示
     if (dateStr > todayStr) return false;  // 未來：永遠隱藏
 
-    // 今天：判斷臺灣時間是否已過上午 10 點
-    const taiwanNow = new Date(Date.now() + 8 * 60 * 60 * 1000);
-    return taiwanNow.getUTCHours() >= 10;
+    // 今天：判斷臺灣時間是否已過上午 10 點（用 Intl API 取得正確時區小時）
+    const hour = parseInt(
+        new Intl.DateTimeFormat('en-US', {
+            timeZone: 'Asia/Taipei',
+            hour: '2-digit',
+            hour12: false,
+        }).format(new Date()),
+        10
+    );
+    return hour >= 10;
 };

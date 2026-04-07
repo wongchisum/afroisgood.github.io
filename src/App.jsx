@@ -397,7 +397,7 @@ const App = () => {
 
             {/* Desktop layout: two floating windows on the pink desktop */}
             <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-3 relative"
-                 style={{ padding: '4px 12px 12px', paddingTop: '28px' }}>
+                 style={{ padding: '4px 12px 12px', paddingTop: '28px', paddingBottom: isMinimized ? '120px' : undefined }}>
 
                 <Sidebar
                     isPlaying={isPlaying} currentMonth={currentMonth} setCurrentMonth={setCurrentMonth}
